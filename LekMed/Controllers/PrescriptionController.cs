@@ -2,14 +2,13 @@
 
 namespace LekMed.Controllers
 {
-    public class HomeController : Controller
+    public class PrescriptionController : Controller
     {
-        public HomeController() { }
+        public PrescriptionController() { }
 
         public IActionResult Index()
         {
             return View();
         }
-
     }
 }
