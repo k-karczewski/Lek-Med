@@ -25,9 +25,9 @@ namespace LekMed.Controllers
                     });
         }
 
-        public IActionResult View(int indexOfPrescription)
+        public IActionResult View(int indexOfDoctor, int indexOfPrescription)
         {
-            return RedirectToAction("Index", "Medicine", new { indexOfDoctor = IndexOfDoctor, indexOfPrescription = indexOfPrescription });
+            return RedirectToAction("Index", "Medicine", new { indexOfDoctor = indexOfDoctor, indexOfPrescription = indexOfPrescription });
         }
 
         public IActionResult Add()
