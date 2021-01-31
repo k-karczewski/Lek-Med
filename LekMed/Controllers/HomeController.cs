@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using LekMed.Core;
+using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -6,21 +7,25 @@ namespace LekMed.Controllers
 {
     public class HomeController : Controller
     {
-        public HomeController() { }
+        private readonly ViewModelMapper _mapper;
+        private readonly IDoctorService _doctorService;
+
+        public HomeController(IDoctorService doctorService, ViewModelMapper mapper) 
+        {
+            _doctorService = doctorService;
+            _mapper = mapper;
+        }
 
         public IActionResult Index(string filterString)
         {
-            if(string.IsNullOrEmpty(filterString))
-            {
-                return View(TestDatabase.Doctors);
-            }
+            var doctorVMs = _mapper.Map(_doctorService.GetDoctors(filterString));
 
-            return View(TestDatabase.Doctors.Where(x => x.Name.ToLower().Contains(filterString.ToLower())).ToList());
+            return View(doctorVMs);
         }
 
-        public IActionResult View(int indexOfDoctor)
+        public IActionResult View(int doctorId)
         {
-            return RedirectToAction("Index", "Prescription", new { indexOfDoctor = indexOfDoctor });
+            return RedirectToAction("Index", "Prescription", new { doctorId = doctorId });
         }
 
         public IActionResult Add()
@@ -31,13 +36,15 @@ namespace LekMed.Controllers
         [HttpPost]
         public IActionResult Add(DoctorViewModel doctorVM)
         {
-            TestDatabase.Doctors.Add(doctorVM);
+            _doctorService.AddNewDoctor(_mapper.Map(doctorVM));
             return RedirectToAction("Index");
         }
 
-        public IActionResult Delete(int indexOfDoctor)
+        public IActionResult Delete(int doctorId)
         {
-            return View();
+            _doctorService.DeleteDoctor(doctorId);
+
+            return RedirectToAction("Index");
         }
     }
 }

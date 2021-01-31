@@ -1,33 +1,38 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using LekMed.Core;
+using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 
 namespace LekMed.Controllers
 {
     public class PrescriptionController : Controller
     {
-        private int IndexOfDoctor { get; set; }
+        private readonly ViewModelMapper _mapper;
+        private readonly IDoctorService _doctorService;
 
-        public PrescriptionController() { }
-
-        public IActionResult Index(int indexOfDoctor, string filterString)
+        public PrescriptionController(IDoctorService doctorService, ViewModelMapper mapper) 
         {
-            IndexOfDoctor = indexOfDoctor;
-
-            if (string.IsNullOrEmpty(filterString))
-            {
-                return View(TestDatabase.Doctors.ElementAt(indexOfDoctor));
-            }
-            
-            return View(new DoctorViewModel 
-                    { 
-                        Name = TestDatabase.Doctors.ElementAt(indexOfDoctor).Name,
-                        Prescriptions = TestDatabase.Doctors.ElementAt(indexOfDoctor).Prescriptions.Where(x => x.Name.ToLower().Contains(filterString.ToLower())).ToList()
-                    });
+            _mapper = mapper;
+            _doctorService = doctorService;
         }
 
-        public IActionResult View(int indexOfDoctor, int indexOfPrescription)
+        public IActionResult Index(int doctorId, string filterString)
         {
-            return RedirectToAction("Index", "Medicine", new { indexOfDoctor = indexOfDoctor, indexOfPrescription = indexOfPrescription });
+            TempData["doctorId"] = doctorId;
+
+            var prescriptionDtos = _doctorService.GetPrescriptionsForDoctor(doctorId, filterString);
+            var doctorDto = _doctorService.GetDoctors(null).FirstOrDefault(x => x.Id == doctorId);
+
+            var prescrptionVMs = _mapper.Map(prescriptionDtos);
+            var doctorVM = _mapper.Map(doctorDto);
+
+            doctorVM.Prescriptions = prescrptionVMs;
+
+            return View(doctorVM);
+        }
+
+        public IActionResult View(int prescriptionId)
+        {
+            return RedirectToAction("Index", "Medicine", new { doctorId = int.Parse(TempData["doctorId"].ToString()), prescriptionId = prescriptionId });
         }
 
         public IActionResult Add()
@@ -38,13 +43,22 @@ namespace LekMed.Controllers
         [HttpPost]
         public IActionResult Add(PrescriptionViewModel prescriptionVM)
         {
-            TestDatabase.Doctors.ElementAt(IndexOfDoctor).Prescriptions.Add(prescriptionVM);
-            return RedirectToAction("Index");
+            int doctorId = int.Parse(TempData["doctorId"].ToString());
+
+            var prescriptionDto = _mapper.Map(prescriptionVM);
+
+            _doctorService.AddNewPrescription(prescriptionDto, doctorId);
+
+            return RedirectToAction("Index", new { doctorId = doctorId });
         }
 
-        public IActionResult Delete(int indexOfPrescription)
+        public IActionResult Delete(int prescriptionId)
         {
-            return View();
+            int doctorId = int.Parse(TempData["doctorId"].ToString());
+
+            _doctorService.DeletePrescription(prescriptionId);
+
+            return RedirectToAction("Index", new { doctorId = doctorId });
         }
     }
 }
