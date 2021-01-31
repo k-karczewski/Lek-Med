@@ -12,6 +12,6 @@ namespace LekMed.Database
         public int WorkYears { get; set; }
         public bool IsAbleToMakePrescription { get; set; }
 
-        public virtual List<PrescriptionEntity> Prescriptions { get; set; }
+        public virtual IEnumerable<PrescriptionEntity> Prescriptions { get; set; }
     }
 }

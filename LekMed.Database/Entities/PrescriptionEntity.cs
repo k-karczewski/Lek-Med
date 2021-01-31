@@ -12,6 +12,6 @@ namespace LekMed.Database
         public int DoctorId { get; set; }
         public virtual DoctorEntity Doctor { get; set; }
 
-        public virtual List<MedicineEntity> Medicines { get; set; }
+        public virtual IEnumerable<MedicineEntity> Medicines { get; set; }
     }
 }
