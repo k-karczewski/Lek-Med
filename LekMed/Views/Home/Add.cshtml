@@ -5,7 +5,11 @@
 }
 
 <form asp-controller="Home" asp-action="Add">
-    <p>Name:</p>
-    <input type="text" name="Name" />
+
+    First name: <input type="text" name="FirstName" /> <br />
+    Last name: <input type="text" name="LastName" /> <br />
+    Phone number: <input type="number" name="PhoneNumber" /> <br />
+    Work years: <input type="number" name="WorkYears" /> <br />
+    Is able to make prescriptions: <input type="checkbox" name="IsAbleToMakePrescription" /> <br />
     <button type="submit" class="btn btn-success">Add</button>
 </form>

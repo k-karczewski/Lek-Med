@@ -4,13 +4,14 @@
 }
 
 <a asp-controller="Prescription" asp-action="Add" class="btn btn-success">Go to add</a>
-<form asp-controller="Prescription" asp-action="Index">
+<form asp-controller="Prescription" asp-action="Index" asp-route-doctorId="@Model.Id">
     <input type="text" name="FilterString" />
     <button type="submit" class="btn btn-success">Filter</button>
 </form>
 <div>
-    Doctor's data:
-    Name: @Model.Name
+    Doctor's data: <br />
+    First name: @Model.FirstName <br/>
+    Last name: @Model.LastName
 </div>
 
 <div class="text-center">
@@ -19,6 +20,8 @@
             <tr>
                 <th scope="col">#</th>
                 <th scope="col">Name</th>
+                <th scope="col">Created Date</th>
+                <th scope="col">Owner</th>
                 <th scope="col">Actions</th>
             </tr>
         </thead>
@@ -26,12 +29,14 @@
             @foreach (var prescription in Model.Prescriptions)
             {
             <tr>
-                <th scope="row">@(Model.Prescriptions.IndexOf(prescription) + 1)</th>
+                <th scope="row">@(prescription.Id)</th>
                 <td>@prescription.Name</td>
+                <td>@prescription.CreatedDate</td>
+                <td>@Model.FirstName @Model.LastName</td>
                 <td>
-                    <a asp-area="" asp-controller="Prescription" asp-action="View" asp-route-indexOfPrescription="@Model.Prescriptions.IndexOf(prescription)">View</a> 
+                    <a asp-area="" asp-controller="Prescription" asp-action="View" asp-route-prescriptionId="@prescription.Id">View</a> 
                     | 
-                    <a asp-area="" asp-controller="Prescription" asp-action="Delete" asp-route-indexOfPrescription="@Model.Prescriptions.IndexOf(prescription)">Delete</a>
+                    <a asp-area="" asp-controller="Prescription" asp-action="Delete" asp-route-prescriptionId="@prescription.Id">Delete</a>
                 </td>
             </tr>
             }
