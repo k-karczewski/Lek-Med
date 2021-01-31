@@ -28,7 +28,7 @@ namespace LekMed
             services.AddTransient<IPrescriptionRepository, PrescriptionRepository>();
             services.AddTransient<IMedicineRepository, MedicineRepository>();
 
-            services.AddTransient<DoctorsMapper>();
+            services.AddTransient<DtoMappers>();
             services.AddTransient<IDoctorService, DoctorService>();
         }
 

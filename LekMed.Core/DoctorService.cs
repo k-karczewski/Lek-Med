@@ -10,9 +10,9 @@ namespace LekMed.Core
         private readonly IDoctorRepository _doctorRepository;
         private readonly IPrescriptionRepository _prescriptionRepository;
         private readonly IMedicineRepository _medicineRepository;
-        private readonly DoctorsMapper _mapper;
+        private readonly DtoMappers _mapper;
 
-        public DoctorService(IDoctorRepository doctorRepository, IPrescriptionRepository prescriptionRepository, IMedicineRepository medicineRepository, DoctorsMapper mapper)
+        public DoctorService(IDoctorRepository doctorRepository, IPrescriptionRepository prescriptionRepository, IMedicineRepository medicineRepository, DtoMappers mapper)
         {
             _doctorRepository = doctorRepository;
             _prescriptionRepository = prescriptionRepository;

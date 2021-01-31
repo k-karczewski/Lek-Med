@@ -6,11 +6,11 @@ using System.Text;
 
 namespace LekMed.Core
 {
-    public class DoctorsMapper
+    public class DtoMappers
     {
         private IMapper _mapper;
 
-        public DoctorsMapper()
+        public DtoMappers()
         {
             _mapper = new MapperConfiguration(config =>
             {
